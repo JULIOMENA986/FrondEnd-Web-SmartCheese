@@ -41,8 +41,8 @@ export default {
 				const response = await axios.post('http://127.0.0.1:3333/api/logout', {
 					id: this.user.id
 				});
+        console.log(response.data)
 			} 
-      console.log(response.data)
         catch (error) {
 				console.error(error);
 				alert('Error. Verifique sus credenciales');

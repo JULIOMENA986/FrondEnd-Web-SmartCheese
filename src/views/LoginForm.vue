@@ -46,7 +46,8 @@
             password: this.password
           });
           console.log(response.data);
-          // Handle successful login
+          alert("Inicio de sesión exitoso");
+          this.$router.push('/');
         } catch (error) {
           console.error(error);
           // Handle login error
