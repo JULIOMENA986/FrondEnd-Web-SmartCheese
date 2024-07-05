@@ -77,7 +77,7 @@ export default {
 }
 
 .left-column {
-  background: linear-gradient(to bottom, #ffcc33, #ff9900);
+  background: linear-gradient(to bottom, #2F3033 0%, #227050 100%);
   color: white;
   text-align: center;
 }
@@ -97,14 +97,14 @@ h2 {
 }
 
 button.btn-primary {
-  background-color: #ffcc33;
-  border-color: #ffcc33;
+  background-color: #2F3033;
+  border-color: #2F3033;
   color: white;
 }
 
 button.btn-primary:hover {
-  background-color: #ff9900;
-  border-color: #ff9900;
+  background-color: #227050;
+  border-color: #227050;
 }
 
 @media (max-width: 768px) {
