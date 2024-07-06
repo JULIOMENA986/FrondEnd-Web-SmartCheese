@@ -17,7 +17,7 @@
             <input type="email" v-model="email" class="form-control" placeholder="E-mail" required />
           </div>
           <div class="form-group mb-3">
-            <input type="text" v-model="mobileNumber" class="form-control" placeholder="Mobile number" required />
+            <input type="text" v-model="name" class="form-control" placeholder="Name" required />
           </div>
           <div class="form-group mb-3">
             <input type="password" v-model="password" class="form-control" placeholder="Password" required />
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       email: '',
-      mobileNumber: '',
+      name: '',
       password: '',
       confirmPassword: ''
     };
@@ -53,9 +53,9 @@ export default {
         return;
       }
       try {
-        const response = await axios.post('https://your-api-endpoint.com/register', {
+        const response = await axios.post('http://127.0.0.1:3333/api/register', {
           email: this.email,
-          mobileNumber: this.mobileNumber,
+          name: this.name,
           password: this.password
         });
         console.log(response.data);

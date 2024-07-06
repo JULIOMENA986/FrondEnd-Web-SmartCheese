@@ -3,12 +3,19 @@ import RegisterForm from '../views/RegisterForm.vue';
 import HomeView from '../views/HomeView.vue';
 import LoginForm from '../views/LoginForm.vue';
 import ConfirmateCodeAuth from '../views/ConfirmateCodeAuth.vue';
+import store from '@/store';
 
 const routes = [
   {
     path: '/',
+    name: '',
+    component: LoginForm
+  },
+  {
+    path: '/home',
     name: 'Home',
-    component: HomeView
+    component: HomeView,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -23,7 +30,8 @@ const routes = [
   {
     path: '/confirmatecode',
     name: 'ConfirmateCode',
-    component: ConfirmateCodeAuth
+    component: ConfirmateCodeAuth,
+    meta: { requiresLogin: true }
   }
 ];
 
@@ -31,4 +39,24 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!localStorage.getItem('token') || !store.getters.isAuthenticated) {
+      next({  name: 'Login' });
+
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.requiresLogin)) {
+    if (store.getters.isLoggedIn) {
+      next({ name: 'Login' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
 export default router;

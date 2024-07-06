@@ -13,7 +13,7 @@
 						
 						<br>
 
-						<a type="button" class="btn btn-outline-danger" href="/logout">Log Out</a>
+						<a type="button" class="btn btn-outline-danger" @click="logout">Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -23,6 +23,7 @@
 
 <script>
 import axios from 'axios';
+import store from '@/store';
 
 export default {
 	name: 'HomeView',
@@ -38,10 +39,20 @@ export default {
 	methods: {
 		async logout() {
 			try {
+				const token = store.state.token;
+
 				const response = await axios.post('http://127.0.0.1:3333/api/logout', {
-					id: this.user.id
+					'Content-Type': 'application/json',
+				},
+				{
+					headers: {
+						'Authorization': `Bearer ${token}`
+					}
 				});
-        console.log(response.data)
+				
+				console.log(response.data)
+				localStorage.removeItem('token');
+				this.$router.push('/login');
 			} 
         catch (error) {
 				console.error(error);

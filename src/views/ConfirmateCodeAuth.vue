@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import store from '@/store';
+
 export default {
   name: 'ConfirmateCodeAuth',
   data() {
@@ -17,10 +20,30 @@ export default {
     };
   },
   methods: {
-    confirmCode() {
-      // Aquí iría la lógica para confirmar el código de verificación
-      console.log('Código confirmado:', this.code);
-      // Por ejemplo, podrías hacer una llamada a una API para validar el código
+    async confirmCode() {
+      try {
+        var token = localStorage.getItem('token');
+
+        const response = await axios.post('http://127.0.0.1:3333/api/verify', {
+          code: this.code,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const newToken = response.data?.data?.token;
+        localStorage.setItem('token', newToken);
+
+        const user = response.data?.data?.user;
+
+        store.dispatch('authenticate', { token, user });
+
+        this.$router.push('/home');
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 };

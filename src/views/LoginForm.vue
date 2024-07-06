@@ -29,6 +29,7 @@
 
 <script>
 import axios from 'axios';
+import store from '@/store';
 
 export default {
   name: 'LoginForm',
@@ -41,13 +42,27 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('https://your-api-endpoint.com/login', {
+        const response = await axios.post('http://127.0.0.1:3333/api/login', {
           email: this.email,
           password: this.password
         });
         console.log(response.data);
-        alert("Inicio de sesión exitoso");
-        this.$router.push('/');
+        const enable2fa = response.data?.data?.enable2fa;
+        const token = response.data?.data?.token;
+        var route = '';
+        localStorage.setItem('token', token);
+
+        if (enable2fa) {
+          store.dispatch('loginAlone', token);
+          route = '/confirmatecode';
+        } else {
+          const user = response.data?.data?.user;
+          store.dispatch('authenticate', { token, user });
+          route = '/home';
+        }
+        
+        this.$router.push(route);
+
       } catch (error) {
         console.error(error);
         // Handle login error
