@@ -1,7 +1,8 @@
 <template>
-    <div :class="['card', color]">
+    <div :class="['card', cardClass]">
       <h3>{{ title }}</h3>
-      <p>{{ amount }}</p>
+      <p>{{ value }}</p>
+      <span>{{ description }}</span>
     </div>
   </template>
   
@@ -10,33 +11,58 @@
     name: 'AppCard',
     props: {
       title: String,
-      amount: String,
+      value: String,
+      description: String,
       color: String
+    },
+    computed: {
+      cardClass() {
+        return {
+          'net-profit': this.color === 'orange',
+          'orders-dollars': this.color === 'blue',
+          'sales-amount': this.color === 'green'
+        };
+      }
     }
   }
   </script>
-
   
-  
-  <style>
+  <style scoped>
   .card {
+    background-color: #fff;
     padding: 20px;
-    border-radius: 8px;
-    color: white;
-    width: 200px;
-    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  .orange {
-    background-color: orange;
+  .card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 10px;
   }
   
-  .blue {
-    background-color: blue;
+  .card p {
+    font-size: 24px;
+    font-weight: 700;
+    color: #444;
   }
   
-  .purple {
-    background-color: purple;
+  .card span {
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .net-profit {
+    border-left: 5px solid #e67e22;
+  }
+  
+  .orders-dollars {
+    border-left: 5px solid #3498db;
+  }
+  
+  .sales-amount {
+    border-left: 5px solid #2ecc71;
   }
   </style>
   
