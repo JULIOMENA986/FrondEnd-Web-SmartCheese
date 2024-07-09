@@ -19,7 +19,7 @@
           <div class="form-group mb-3">
             <input type="password" v-model="password" class="form-control" placeholder="Password" required />
           </div>
-          <button type="submit" class="btn btn-primary w-100">Login</button>
+          <button type="submit" class="btn btn-primary w-100 ">Login</button>
           <p class="mt-3">Don't have an account? <a href="/register">Register</a></p>
         </form>
       </div>

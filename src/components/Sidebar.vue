@@ -7,11 +7,11 @@
       </div>
       <nav>
         <ul>
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Sucursales</a></li>
-          <li><a href="#">Empleados</a></li>
-          <li><a href="#">Productos</a></li>
-          <li><a href="#">Settings</a></li>
+          <li><router-link to="/dashboard">Dashboard</router-link></li>
+          <li><router-link to="/sucursales">Sucursales</router-link></li>
+          <li><router-link to="/empleados">Empleados</router-link></li>
+          <li><router-link to="/productos">Productos</router-link></li>
+          <li><router-link to="/settings">Settings</router-link></li>
         </ul>
       </nav>
       <button class="logout-btn">Logout</button>

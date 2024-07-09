@@ -4,7 +4,8 @@ import HomeView from '../views/HomeView.vue';
 import LoginForm from '../views/LoginForm.vue';
 import ConfirmateCodeAuth from '../views/ConfirmateCodeAuth.vue';
 import Dashboard from '../views/Dashboard.vue';
-//import store from '@/store';
+import Sucursales from '../views/Sucursales.vue';
+// import store from '@/store';
 
 const routes = [
   {
@@ -39,6 +40,12 @@ const routes = [
     name: 'ConfirmateCode',
     component: ConfirmateCodeAuth,
     meta: { requiresLogin: true }
+  },
+  {
+    path: '/SucursalesDash',
+    name: 'SucursalesDash',
+    component: Sucursales,
+    meta: { requiresAuth: true }
   }
 ];
 
@@ -46,6 +53,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
 
 /*router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -64,5 +72,6 @@ const router = createRouter({
     next();
   }
 });*/
+
 
 export default router;

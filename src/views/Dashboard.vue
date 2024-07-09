@@ -8,11 +8,11 @@
         <div class="content">
           <div class="left-content">
             <h2>Today</h2>
-            <DashboardItem title="Productos" time="5:12 pm" description="Bejanlo di pasar" color="blue" />
-            <DashboardItem title="Housing" time="5:12 pm" description="Boyar Lietrik" color="orange" />
+            <ComponentDashboard title="Productos" time="5:12 pm" description="Bejanlo di pasar" color="blue" />
+            <ComponentDashboard title="Housing" time="5:12 pm" description="Boyar Lietrik" color="orange" />
             <h2>Monday, 23 March 2020</h2>
-            <DashboardItem title="Food and Drink" time="5:12 pm" description="Makan Steak" color="red" />
-            <DashboardItem title="Entertainment" time="5:12 pm" description="Nonton Blokop" color="green" />
+            <ComponentDashboard title="Food and Drink" time="5:12 pm" description="Makan Steak" color="red" />
+            <ComponentDashboard title="Entertainment" time="5:12 pm" description="Nonton Blokop" color="green" />
           </div>
           <div class="right-content">
             <Card title="Net Profit" value="Algo" description="45% increase from target" color="orange" />
@@ -26,13 +26,14 @@
   
   <script>
   import Sidebar from '../components/Sidebar.vue';
-  //import ComponentDashboard from '../components/ComponentDashboard.vue';
+  import ComponentDashboard from '../components/ComponentDashboard.vue';
   import Card from '../components/Card.vue';
   
   export default {
     name: 'AppDashboard',
     components: {
       Sidebar,
+      ComponentDashboard,
       Card
     }
   }
