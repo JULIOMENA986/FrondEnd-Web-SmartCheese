@@ -8,6 +8,7 @@ import Sucursales from '../views/Sucursales.vue';
 
 //import store from '@/store';
 import VueJwtDecode from 'vue-jwt-decode';
+import Cookies from 'js-cookie';
 
 const routes = [
   {
@@ -57,25 +58,35 @@ const router = createRouter({
 });
 
 
-router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token') ?? null;
-  const decoded = token ? VueJwtDecode.decode(token) : { is_auth: false };
-  console.log('decoded', decoded);
+router.beforeEach(async (to) => {
+  // const token = localStorage.getItem('token') ?? null;
 
-  if (next.meta.requiresAuth === true) {
-    if (!decoded.is_auth) {
-      next({ name: 'Login' });
-    } else {
-      next();
-    }
+  if (to.meta.requiresAuth === true) {
+    
+    const token = Cookies.get('token') ?? null;
+    console.log('token', token);
+    const decoded = token !== null ? VueJwtDecode.decode(token) : { is_auth: false };
+    console.log('decoded', decoded);
+    if (token === null || !decoded.is_auth ) {
+      return { name: 'Login' };
+    } 
+    // else {
+    //   const path = to.path;
+    //   console.log('path', path);
+    //   return { path };
+    // }
   } 
 
-  if (next.meta.requiresLogin === true) {
+  if (to.meta.requiresLogin === true) {
+    const token = Cookies.get('token') ?? null;
     if (!token) {
-      next({ name: 'Login' });
-    } else {
-      next();
-    }
+      return { name: 'Login' };
+    } 
+    // else {
+    //   const path = to.path;
+    //   console.log('path', path);
+    //   return { path };
+    // }
   }
 });
 

@@ -11,20 +11,23 @@
 <script>
 import axios from 'axios';
 import store from '@/store';
+import Cookies from 'js-cookie';
 
 export default {
   name: 'ConfirmateCodeAuth',
   data() {
     return {
-      code: ''
+      code: '',
+      api_url: 'http://127.0.0.1:3300/api/',
     };
   },
   methods: {
     async confirmCode() {
       try {
-        var token = localStorage.getItem('token');
+        // var token = localStorage.getItem('token');
+        const token = Cookies.get('token')
 
-        const response = await axios.post('http://127.0.0.1:3333/api/verify', {
+        const response = await axios.post(this.api_url, 'verify', {
           code: this.code,
         },
         {
@@ -34,7 +37,8 @@ export default {
         });
 
         const newToken = response.data?.data?.token;
-        localStorage.setItem('token', newToken);
+        // localStorage.setItem('token', newToken);
+        Cookies.set('token', newToken);
 
         const user = response.data?.data?.user;
 

@@ -13,6 +13,7 @@
         <form @submit.prevent="handleLogin" class="w-75">
           <h2>LOGIN</h2>
           <p>Please fill your information below</p>
+          <div class="alert alert-danger" v-if="error_msg">{{ error_msg }}</div>
           <div class="form-group mb-3">
             <input type="email" v-model="email" class="form-control" placeholder="E-mail" required />
           </div>
@@ -30,33 +31,43 @@
 <script>
 import axios from 'axios';
 import store from '@/store';
+import Cookies from 'js-cookie';
 
 export default {
   name: 'LoginForm',
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      api_url: 'http://127.0.0.1:3300/api/',
+      error_msg: ''
     };
   },
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('http://127.0.0.1:3333/api/login', {
+        const response = await axios.post(this.api_url + 'login', {
           email: this.email,
           password: this.password
         });
         console.log(response.data);
-        const enable2fa = response.data?.data?.enable2fa;
-        const token = response.data?.data?.token;
+        
+        if (response.data?.status === 'error') {
+          throw new Error(response.data?.message);
+        }
+
+
+        const enable2fa = response.data?.enable2fa;
+        const token = response.data?.token;
         var route = '';
-        localStorage.setItem('token', token);
+        // localStorage.setItem('token', token);
+        Cookies.set('token', token);
 
         if (enable2fa) {
           store.dispatch('loginAlone', token);
           route = '/confirmatecode';
         } else {
-          const user = response.data?.data?.user_id;
+          const user = response.data?.user;
           store.dispatch('authenticate', { token, user });
           route = '/dashboard';
         }
@@ -64,7 +75,8 @@ export default {
         this.$router.push(route);
 
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
+        this.error_msg = error.message;
         // Handle login error
       }
     }
