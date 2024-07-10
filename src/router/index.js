@@ -10,7 +10,7 @@ import Sucursales from '../views/Sucursales.vue';
 const routes = [
   {
     path: '/',
-    name: 'Login',
+    name: '',
     component: LoginForm
   },
   {
@@ -42,8 +42,8 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/SucursalesDash',
-    name: 'SucursalesDash',
+    path: '/Sucursales',
+    name: 'Sucursales',
     component: Sucursales,
     meta: { requiresAuth: true }
   }
