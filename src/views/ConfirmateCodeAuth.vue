@@ -40,7 +40,7 @@ export default {
 
         store.dispatch('authenticate', { token, user });
 
-        this.$router.push('/Dashborard');
+        this.$router.push('/dashborard');
       } catch (error) {
         console.error(error);
       }

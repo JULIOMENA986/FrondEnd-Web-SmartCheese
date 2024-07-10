@@ -56,15 +56,15 @@ export default {
           store.dispatch('loginAlone', token);
           route = '/confirmatecode';
         } else {
-          const user = response.data?.data?.user;
+          const user = response.data?.data?.user_id;
           store.dispatch('authenticate', { token, user });
-          route = '/home';
+          route = '/dashboard';
         }
         
         this.$router.push(route);
 
       } catch (error) {
-        console.error(error);
+        console.log(error);
         // Handle login error
       }
     }

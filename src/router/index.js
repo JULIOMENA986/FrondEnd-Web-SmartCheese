@@ -5,12 +5,14 @@ import LoginForm from '../views/LoginForm.vue';
 import ConfirmateCodeAuth from '../views/ConfirmateCodeAuth.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Sucursales from '../views/Sucursales.vue';
-// import store from '@/store';
+
+//import store from '@/store';
+import VueJwtDecode from 'vue-jwt-decode';
 
 const routes = [
   {
     path: '/',
-    name: 'Login',
+    name: 'index',
     component: LoginForm
   },
   {
@@ -55,23 +57,27 @@ const router = createRouter({
 });
 
 
-/*router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!localStorage.getItem('token') || !store.getters.isAuthenticated) {
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token') ?? null;
+  const decoded = token ? VueJwtDecode.decode(token) : { is_auth: false };
+  console.log('decoded', decoded);
+
+  if (next.meta.requiresAuth === true) {
+    if (!decoded.is_auth) {
       next({ name: 'Login' });
     } else {
       next();
     }
-  } else if (to.matched.some(record => record.meta.requiresLogin)) {
-    if (store.getters.isLoggedIn) {
+  } 
+
+  if (next.meta.requiresLogin === true) {
+    if (!token) {
       next({ name: 'Login' });
     } else {
       next();
     }
-  } else {
-    next();
   }
-});*/
+});
 
 
 export default router;

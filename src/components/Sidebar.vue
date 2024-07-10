@@ -8,19 +8,49 @@
       <nav>
         <ul>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
-          <li><router-link to="/sucursales">Sucursales</router-link></li>
+          <li><router-link to="/SucursalesDash">Sucursales</router-link></li>
           <li><router-link to="/empleados">Empleados</router-link></li>
           <li><router-link to="/productos">Productos</router-link></li>
           <li><router-link to="/settings">Settings</router-link></li>
         </ul>
       </nav>
-      <button class="logout-btn">Logout</button>
+      <button class="logout-btn" @click="logout">Logout</button>
     </div>
   </template>
   
   <script>
+  import axios from 'axios';
+  import store from '@/store';
+  
   export default {
-    name: 'AppSidebar'
+    name: 'AppSidebar',
+    data() {
+
+    }, 
+    methods: {
+      async logout() {
+			try {
+				const token = store.state.token;
+
+				const response = await axios.post('http://127.0.0.1:3333/api/logout', {
+					'Content-Type': 'application/json',
+				},
+				{
+					headers: {
+						'Authorization': `Bearer ${token}`
+					}
+				});
+				
+				console.log(response.data)
+				localStorage.removeItem('token');
+				this.$router.push('/login');
+			} 
+        catch (error) {
+				console.error(error);
+				alert('Error. Verifique sus credenciales');
+			}
+		}
+    }
   }
   </script>
   
