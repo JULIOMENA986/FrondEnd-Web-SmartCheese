@@ -1,7 +1,7 @@
 <template>
     <div class="sidebar">
       <div class="profile">
-        <img src="" alt="Admin" class="profile-pic" />
+        <img src="../assets/profile.jpg" alt="Admin" class="profile-pic" />
         <p class="name">Admin</p>
         <p class="email">Admin@email.com</p>
       </div>
@@ -63,6 +63,7 @@
     flex-direction: column;
     align-items: center;
     background: linear-gradient(to right, #2F3033, #227050);
+    height: 100vh;
   }
   
   .profile {
@@ -127,4 +128,5 @@
     background-color: #2980b9;
   }
   </style>
+  
   

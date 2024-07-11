@@ -45,8 +45,8 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/SucursalesDash',
-    name: 'SucursalesDash',
+    path: '/Sucursales',
+    name: 'Sucursales',
     component: Sucursales,
     meta: { requiresAuth: true }
   }
