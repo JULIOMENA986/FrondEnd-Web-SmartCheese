@@ -18,16 +18,15 @@ export default {
   data() {
     return {
       code: '',
-      api_url: 'http://127.0.0.1:3300/api/',
+      apiUrl: 'http://127.0.0.1:3333/api/',
     };
   },
   methods: {
     async confirmCode() {
       try {
-        // var token = localStorage.getItem('token');
         const token = Cookies.get('token')
 
-        const response = await axios.post(this.api_url, 'verify', {
+        const response = await axios.post(this.apiUrl + 'verify', {
           code: this.code,
         },
         {
@@ -36,15 +35,15 @@ export default {
           }
         });
 
-        const newToken = response.data?.data?.token;
-        // localStorage.setItem('token', newToken);
+        const newToken = response.data?.token;
+        
         Cookies.set('token', newToken);
 
-        const user = response.data?.data?.user;
+        const user = response.data?.user;
 
         store.dispatch('authenticate', { token, user });
 
-        this.$router.push('/dashborard');
+        this.$router.push('/dashboard');
       } catch (error) {
         console.error(error);
       }

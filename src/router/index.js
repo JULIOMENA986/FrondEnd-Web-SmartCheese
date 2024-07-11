@@ -45,7 +45,7 @@ const routes = [
     meta: { requiresLogin: true }
   },
   {
-    path: '/Sucursales',
+    path: '/sucursales',
     name: 'Sucursales',
     component: Sucursales,
     meta: { requiresAuth: true }
@@ -59,22 +59,13 @@ const router = createRouter({
 
 
 router.beforeEach(async (to) => {
-  // const token = localStorage.getItem('token') ?? null;
-
   if (to.meta.requiresAuth === true) {
     
     const token = Cookies.get('token') ?? null;
-    console.log('token', token);
     const decoded = token !== null ? VueJwtDecode.decode(token) : { is_auth: false };
-    console.log('decoded', decoded);
     if (token === null || !decoded.is_auth ) {
       return { name: 'Login' };
     } 
-    // else {
-    //   const path = to.path;
-    //   console.log('path', path);
-    //   return { path };
-    // }
   } 
 
   if (to.meta.requiresLogin === true) {
@@ -82,11 +73,6 @@ router.beforeEach(async (to) => {
     if (!token) {
       return { name: 'Login' };
     } 
-    // else {
-    //   const path = to.path;
-    //   console.log('path', path);
-    //   return { path };
-    // }
   }
 });
 

@@ -9,7 +9,6 @@
         <thead>
           <tr>
             <th>Sucursal</th>
-            <th>Estado</th>
             <th>Nombre</th>
             <th>Dirección</th>
             <th>Acciones</th>
@@ -18,12 +17,11 @@
         <tbody>
           <tr v-for="sucursal in filteredSucursales" :key="sucursal.id">
             <td>{{ sucursal.id }}</td>
-            <td :class="{'status-open': sucursal.estado === 'Abierto', 'status-closed': sucursal.estado === 'Cerrado'}">{{ sucursal.estado }}</td>
-            <td>{{ sucursal.nombre }}</td>
-            <td>{{ sucursal.direccion }}</td>
+            <td>{{ sucursal.name }}</td>
+            <td>{{ sucursal.address }}</td>
             <td>
-              <button class="action-button edit" @click="showEditModal(sucursal)"><i class="fas fa-pencil-alt"></i></button>
-              <button class="action-button delete" @click="deleteSucursal(sucursal.id)"><i class="fas fa-times"></i></button>
+              <button aria-label="true" class="action-button edit" @click="showEditModal(sucursal)"><i class="fa fa-pencil"></i></button>
+              <button aria-label="true" class="action-button delete" @click="deleteSucursal(sucursal.id)"><i class="fa fa-times"></i></button>
             </td>
           </tr>
         </tbody>
@@ -36,17 +34,10 @@
         <span class="close" @click="closeModal">&times;</span>
         <h3>{{ isEditing ? 'Editar Sucursal' : 'Agregar Sucursal' }}</h3>
         <form @submit.prevent="isEditing ? updateSucursal() : addSucursal()">
-          <label>Sucursal:</label>
-          <input type="text" v-model="form.id" :disabled="isEditing" required />
-          <label>Estado:</label>
-          <select v-model="form.estado" required>
-            <option>Abierto</option>
-            <option>Cerrado</option>
-          </select>
           <label>Nombre:</label>
-          <input type="text" v-model="form.nombre" required />
+          <input type="text" v-model="form.name" required />
           <label>Dirección:</label>
-          <input type="text" v-model="form.direccion" required />
+          <input type="text" v-model="form.address" required />
           <button type="submit">{{ isEditing ? 'Actualizar' : 'Agregar' }}</button>
         </form>
       </div>
@@ -56,6 +47,7 @@
 
 <script>
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default {
   name: 'BranchList',
@@ -65,24 +57,30 @@ export default {
       searchQuery: '',
       isModalVisible: false,
       isEditing: false,
+      apiUrl: 'http://127.0.0.1:3333/api/',
       form: {
         id: '',
-        estado: '',
         nombre: '',
         direccion: ''
-      }
+      },
+      token: '',
     };
   },
   computed: {
     filteredSucursales() {
-      return this.sucursales.filter(sucursal => sucursal.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
+      return this.sucursales.filter(sucursal => sucursal.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    },
+    authHeaders() {
+      return {
+        'Authorization': `Bearer ${this.token}`
+      };
     }
   },
   methods: {
     fetchSucursales() {
-      axios.get('/api/sucursales')
+      axios.get(this.apiUrl + 'subsidiaries/get', { headers: this.authHeaders })
         .then(response => {
-          this.sucursales = response.data;
+          this.sucursales = response.data?.sucursales;
         })
         .catch(error => {
           console.error('Error fetching sucursales:', error);
@@ -90,7 +88,7 @@ export default {
     },
     showAddModal() {
       this.isEditing = false;
-      this.form = { id: '', estado: '', nombre: '', direccion: '' };
+      this.form = { id: '', name: '', address: '' };
       this.isModalVisible = true;
     },
     showEditModal(sucursal) {
@@ -102,9 +100,9 @@ export default {
       this.isModalVisible = false;
     },
     addSucursal() {
-      axios.post('/api/sucursales', this.form)
-        .then(response => {
-          this.sucursales.push(response.data);
+      axios.post(this.apiUrl + 'subsidiaries/create', this.form, { headers: this.authHeaders })
+        .then(() =>{
+          this.fetchSucursales();
           this.closeModal();
         })
         .catch(error => {
@@ -112,10 +110,9 @@ export default {
         });
     },
     updateSucursal() {
-      axios.put(`/api/sucursales/${this.form.id}`, this.form)
-        .then(response => {
-          const index = this.sucursales.findIndex(sucursal => sucursal.id === this.form.id);
-          this.$set(this.sucursales, index, response.data);
+      axios.put(this.apiUrl + 'subsidiaries/update/' + this.form.id, this.form, { headers: this.authHeaders })
+        .then(() => {
+          this.fetchSucursales();
           this.closeModal();
         })
         .catch(error => {
@@ -123,9 +120,9 @@ export default {
         });
     },
     deleteSucursal(id) {
-      axios.delete(`/api/sucursales/${id}`)
+      axios.delete(this.apiUrl + 'subsidiaries/delete/' + id, { headers: this.authHeaders })
         .then(() => {
-          this.sucursales = this.sucursales.filter(sucursal => sucursal.id !== id);
+          this.fetchSucursales();
         })
         .catch(error => {
           console.error('Error deleting sucursal:', error);
@@ -134,11 +131,15 @@ export default {
   },
   mounted() {
     this.fetchSucursales();
+  },
+  created(){
+    this.token = Cookies.get('token');
   }
 };
 </script>
 
 <style scoped>
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 .branch-list {
   padding: 20px;
   background-color: #fff;

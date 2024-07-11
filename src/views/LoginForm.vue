@@ -39,14 +39,14 @@ export default {
     return {
       email: '',
       password: '',
-      api_url: 'http://127.0.0.1:3300/api/',
+      apiUrl: 'http://127.0.0.1:3333/api/',
       error_msg: ''
     };
   },
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post(this.api_url + 'login', {
+        const response = await axios.post(this.apiUrl + 'login', {
           email: this.email,
           password: this.password
         });

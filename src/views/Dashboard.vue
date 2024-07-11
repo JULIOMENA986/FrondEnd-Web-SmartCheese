@@ -46,28 +46,7 @@ export default {
 	mounted() {
 	},
 	methods: {
-		async logout() {
-			try {
-				const token = store.state.token;
-
-				const response = await axios.post('http://127.0.0.1:3333/api/logout', {
-					'Content-Type': 'application/json',
-				},
-				{
-					headers: {
-						'Authorization': `Bearer ${token}`
-					}
-				});
-				
-				console.log(response.data)
-				localStorage.removeItem('token');
-				this.$router.push('/login');
-			} 
-        catch (error) {
-				console.error(error);
-				alert('Error. Verifique sus credenciales');
-			}
-		}
+		
 	},
 };
 </script>

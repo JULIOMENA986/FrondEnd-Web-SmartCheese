@@ -8,7 +8,7 @@
       <nav>
         <ul>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
-          <li><router-link to="/SucursalesDash">Sucursales</router-link></li>
+          <li><router-link to="/sucursales">Sucursales</router-link></li>
           <li><router-link to="/empleados">Empleados</router-link></li>
           <li><router-link to="/productos">Productos</router-link></li>
           <li><router-link to="/settings">Settings</router-link></li>
@@ -20,7 +20,7 @@
   
   <script>
   import axios from 'axios';
-  import store from '@/store';
+  import Cookies from 'js-cookie';
   
   export default {
     name: 'AppSidebar',
@@ -30,7 +30,7 @@
     methods: {
       async logout() {
 			try {
-				const token = store.state.token;
+				const token = Cookies.get('token');
 
 				const response = await axios.post('http://127.0.0.1:3333/api/logout', {
 					'Content-Type': 'application/json',
@@ -42,7 +42,7 @@
 				});
 				
 				console.log(response.data)
-				localStorage.removeItem('token');
+        Cookies.remove('token');
 				this.$router.push('/login');
 			} 
         catch (error) {
@@ -128,5 +128,5 @@
     background-color: #2980b9;
   }
   </style>
-  
+
   
