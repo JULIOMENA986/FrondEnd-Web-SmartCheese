@@ -5,10 +5,11 @@ import LoginForm from '../views/LoginForm.vue';
 import ConfirmateCodeAuth from '../views/ConfirmateCodeAuth.vue';
 import Dashboard from '../views/Dashboard.vue';
 import Sucursales from '../views/Sucursales.vue';
+import Empleados from '@/views/Empleados.vue';
 
 //import store from '@/store';
-import VueJwtDecode from 'vue-jwt-decode';
-import Cookies from 'js-cookie';
+//import VueJwtDecode from 'vue-jwt-decode';
+//import Cookies from 'js-cookie';
 
 const routes = [
   {
@@ -49,6 +50,12 @@ const routes = [
     name: 'Sucursales',
     component: Sucursales,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/empleados',
+    name: 'Empleados', // Añadimos la ruta para Empleados
+    component: Empleados,
+    meta: { requiresAuth: true }
   }
 ];
 
@@ -58,7 +65,7 @@ const router = createRouter({
 });
 
 
-router.beforeEach(async (to) => {
+/*router.beforeEach(async (to) => {
   if (to.meta.requiresAuth === true) {
     
     const token = Cookies.get('token') ?? null;
@@ -74,7 +81,7 @@ router.beforeEach(async (to) => {
       return { name: 'Login' };
     } 
   }
-});
+});*/
 
 
 export default router;

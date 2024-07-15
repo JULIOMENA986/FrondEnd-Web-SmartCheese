@@ -9,7 +9,7 @@
         <ul>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
           <li><router-link to="/sucursales">Sucursales</router-link></li>
-          <li><router-link to="/empleados">Empleados</router-link></li>
+          <li><router-link to="/Empleados">Empleados</router-link></li>
           <li><router-link to="/productos">Productos</router-link></li>
           <li><router-link to="/settings">Settings</router-link></li>
         </ul>
