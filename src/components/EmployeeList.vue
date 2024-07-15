@@ -21,14 +21,14 @@
           </thead>
           <tbody>
             <tr v-for="empleado in filteredEmpleados" :key="empleado.id">
-              <td>{{ empleado.sucursal }}</td>
-              <td>{{ empleado.nombre }}</td>
-              <td>{{ empleado.apellidoPaterno }}</td>
-              <td>{{ empleado.apellidoMaterno }}</td>
+              <td>{{ empleado.subsidiary }}</td>
+              <td>{{ empleado.name }}</td>
+              <td>{{ empleado.father_surname }}</td>
+              <td>{{ empleado.mother_surname }}</td>
               <td>{{ empleado.email }}</td>
-              <td>{{ empleado.telefono }}</td>
-              <td>{{ empleado.direccion }}</td>
-              <td>{{ empleado.puesto }}</td>
+              <td>{{ empleado.phone }}</td>
+              <td>{{ empleado.address }}</td>
+              <td>{{ empleado.position }}</td>
               <td>
                 <button class="action-button edit" @click="showEditModal(empleado)">
                   <i class="fa fa-pencil"></i>
@@ -45,23 +45,23 @@
         <h3>{{ isEditing ? 'Editar Empleado' : 'Agregar Empleado' }}</h3>
         <form @submit.prevent="isEditing ? updateEmpleado() : addEmpleado()">
           <label>Sucursal:</label>
-          <select v-model="form.sucursal">
-            <option v-for="sucursal in sucursales" :key="sucursal.id" :value="sucursal.nombre">{{ sucursal.nombre }}</option>
+          <select v-model="form.subsidiary_id">
+            <option v-for="sucursal in sucursales" :key="sucursal.id" :value="sucursal.id">{{ sucursal.name }}</option>
           </select>
           <label>Nombre:</label>
-          <input type="text" v-model="form.nombre" required />
+          <input type="text" v-model="form.name" required />
           <label>Apellido Paterno:</label>
-          <input type="text" v-model="form.apellidoPaterno" required />
+          <input type="text" v-model="form.father_surname" required />
           <label>Apellido Materno:</label>
-          <input type="text" v-model="form.apellidoMaterno" required />
+          <input type="text" v-model="form.mother_surname" required />
           <label>Email:</label>
-          <input type="email" v-model="form.email" required />
+          <input type="email" v-model="form.email" />
           <label>Teléfono:</label>
-          <input type="text" v-model="form.telefono" required />
+          <input type="text" v-model="form.phone" />
           <label>Dirección:</label>
-          <input type="text" v-model="form.direccion" required />
+          <input type="text" v-model="form.address" />
           <label>Puesto:</label>
-          <input type="text" v-model="form.puesto" required />
+          <input type="text" v-model="form.position" />
           <button type="submit">{{ isEditing ? 'Actualizar' : 'Agregar' }}</button>
         </form>
       </Modal>
@@ -86,21 +86,22 @@
         apiUrl: 'http://127.0.0.1:3333/api/',
         form: {
           id: '',
-          sucursal: '',
-          nombre: '',
-          apellidoPaterno: '',
-          apellidoMaterno: '',
+          subsidiary_id: '',
+          name: '',
+          father_surname: '',
+          mother_surname: '',
           email: '',
-          telefono: '',
-          direccion: '',
-          puesto: ''
+          phone: '',
+          address: '',
+          //TODO: change to position_id after positions CRUD is implemented
+          position: ''
         },
         token: '',
       };
     },
     computed: {
       filteredEmpleados() {
-        return this.empleados.filter(empleado => empleado.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        return this.empleados.filter(empleado => empleado.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
       },
       authHeaders() {
         return {
@@ -112,24 +113,28 @@
       fetchEmpleados() {
         axios.get(this.apiUrl + 'employees/get', { headers: this.authHeaders })
           .then(response => {
-            this.empleados = response.data?.empleados;
+            // response.data?.employees.forEach(employee => {
+            //   employee.subsidiary = employee.subsidiaries[0].name
+            // });
+            this.empleados = response.data?.employees;
+            // console.log(this.empleados);
           })
           .catch(error => {
-            console.error('Error fetching empleados:', error);
+            console.error('Error fetching employees:', error);
           });
       },
       fetchSucursales() {
         axios.get(this.apiUrl + 'subsidiaries/get', { headers: this.authHeaders })
           .then(response => {
-            this.sucursales = response.data?.sucursales;
+            this.sucursales = response.data?.subsidiaries;
           })
           .catch(error => {
-            console.error('Error fetching sucursales:', error);
+            console.error('Error fetching subsidiaries:', error);
           });
       },
       showAddModal() {
         this.isEditing = false;
-        this.form = { id: '', sucursal: '', nombre: '', apellidoPaterno: '', apellidoMaterno: '', email: '', telefono: '', direccion: '', puesto: '' };
+        this.form = { id: '', subsidiary_id: '', name: '', father_surname: '', mother_surname: '', email: '', phone: '', address: '', position: '' };
         this.isModalVisible = true;
       },
       showEditModal(empleado) {

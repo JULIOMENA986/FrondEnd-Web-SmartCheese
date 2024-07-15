@@ -80,7 +80,7 @@ export default {
     fetchSucursales() {
       axios.get(this.apiUrl + 'subsidiaries/get', { headers: this.authHeaders })
         .then(response => {
-          this.sucursales = response.data?.sucursales;
+          this.sucursales = response.data?.subsidiaries;
         })
         .catch(error => {
           console.error('Error fetching sucursales:', error);
