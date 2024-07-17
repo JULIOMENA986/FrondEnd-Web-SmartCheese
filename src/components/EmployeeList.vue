@@ -20,20 +20,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="empleado in filteredEmpleados" :key="empleado.id">
-              <td>{{ empleado.subsidiary }}</td>
-              <td>{{ empleado.name }}</td>
-              <td>{{ empleado.father_surname }}</td>
-              <td>{{ empleado.mother_surname }}</td>
-              <td>{{ empleado.email }}</td>
-              <td>{{ empleado.phone }}</td>
-              <td>{{ empleado.address }}</td>
-              <td>{{ empleado.position }}</td>
+            <tr v-for="employee in filteredEmpleados" :key="employee.id">
+              <td v-if="employee.subsidiaries.length > 0">{{ employee.subsidiaries[0].name }}</td>
+              <td v-else><small>No asociado</small></td>
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.father_surname }}</td>
+              <td>{{ employee.mother_surname }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.phone }}</td>
+              <td>{{ employee.address }}</td>
+              <td>{{ employee.position }}</td>
               <td>
-                <button class="action-button edit" @click="showEditModal(empleado)">
+                <button class="action-button edit" @click="showEditModal(employee)">
                   <i class="fa fa-pencil"></i>
                 </button>
-                <button class="action-button delete" @click="deleteEmpleado(empleado.id)">
+                <button class="action-button delete" @click="deleteEmpleado(employee.id)">
                   <i class="fa fa-times"></i>
                 </button>
               </td>
@@ -101,7 +102,7 @@
     },
     computed: {
       filteredEmpleados() {
-        return this.empleados.filter(empleado => empleado.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        return this.empleados.filter(employee => employee.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
       },
       authHeaders() {
         return {
@@ -113,11 +114,7 @@
       fetchEmpleados() {
         axios.get(this.apiUrl + 'employees/get', { headers: this.authHeaders })
           .then(response => {
-            // response.data?.employees.forEach(employee => {
-            //   employee.subsidiary = employee.subsidiaries[0].name
-            // });
             this.empleados = response.data?.employees;
-            // console.log(this.empleados);
           })
           .catch(error => {
             console.error('Error fetching employees:', error);
@@ -134,12 +131,24 @@
       },
       showAddModal() {
         this.isEditing = false;
-        this.form = { id: '', subsidiary_id: '', name: '', father_surname: '', mother_surname: '', email: '', phone: '', address: '', position: '' };
+        this.form = { 
+          id: '',
+          subsidiary_id: '',
+          name: '',
+          father_surname: '',
+          mother_surname: '',
+          email: '',
+          phone: '',
+          address: '',
+          position: ''
+        };
         this.isModalVisible = true;
       },
-      showEditModal(empleado) {
+      showEditModal(employee) {
         this.isEditing = true;
-        this.form = { ...empleado };
+        this.form = { ...employee };
+        this.form.subsidiary_id = employee.subsidiaries.length > 0 ? employee.subsidiaries[0].id : null;
+
         this.isModalVisible = true;
       },
       closeModal() {
@@ -152,7 +161,7 @@
             this.closeModal();
           })
           .catch(error => {
-            console.error('Error adding empleado:', error);
+            console.error('Error adding employee:', error);
           });
       },
       updateEmpleado() {
@@ -162,7 +171,7 @@
             this.closeModal();
           })
           .catch(error => {
-            console.error('Error updating empleado:', error);
+            console.error('Error updating employee:', error);
           });
       },
       deleteEmpleado(id) {
@@ -171,7 +180,7 @@
             this.fetchEmpleados();
           })
           .catch(error => {
-            console.error('Error deleting empleado:', error);
+            console.error('Error deleting employee:', error);
           });
       }
     },
