@@ -8,8 +8,8 @@ import Sucursales from '../views/Sucursales.vue';
 import Empleados from '@/views/Empleados.vue';
 
 //import store from '@/store';
-//import VueJwtDecode from 'vue-jwt-decode';
-//import Cookies from 'js-cookie';
+import VueJwtDecode from 'vue-jwt-decode';
+import Cookies from 'js-cookie';
 
 const routes = [
   {
@@ -65,12 +65,15 @@ const router = createRouter({
 });
 
 
-/*router.beforeEach(async (to) => {
+router.beforeEach(async (to) => {
   if (to.meta.requiresAuth === true) {
     
     const token = Cookies.get('token') ?? null;
     const decoded = token !== null ? VueJwtDecode.decode(token) : { is_auth: false };
-    if (token === null || !decoded.is_auth ) {
+    const isExpired = decoded.exp < Date.now() / 1000;
+
+    if (token === null || !decoded.is_auth || isExpired) {
+      Cookies.remove('token');
       return { name: 'Login' };
     } 
   } 
@@ -81,7 +84,7 @@ const router = createRouter({
       return { name: 'Login' };
     } 
   }
-});*/
+});
 
 
 export default router;

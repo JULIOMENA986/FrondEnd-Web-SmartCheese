@@ -9,7 +9,7 @@
   
   <script>
   export default {
-    name: 'Modal',
+    name: 'ModalDetails',
     methods: {
       close() {
         this.$emit('close');
